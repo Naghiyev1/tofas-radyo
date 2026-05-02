@@ -1,4 +1,4 @@
-const CACHE_NAME = "tofas-radyo-v1";
+const CACHE_NAME = "tofas-radyo-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
