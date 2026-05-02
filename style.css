@@ -570,3 +570,221 @@ input:focus {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* v2 dashboard upgrades */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(circle at center, black, transparent 82%);
+}
+
+.radio-face {
+  border: 2px solid #5c4a38;
+}
+
+.radio-face::after {
+  content: "TOFAŞ RADYO · DOLBY SYSTEM · FM/AM";
+  position: absolute;
+  right: 28px;
+  bottom: 8px;
+  color: rgba(244, 234, 220, 0.22);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  font-weight: 900;
+}
+
+.display-header {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+
+.display-logo {
+  width: 70px;
+  height: 70px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: rgba(119,255,102,0.08);
+  border: 1px solid rgba(119,255,102,0.26);
+  color: var(--green);
+  font-size: 20px;
+  font-weight: 900;
+  box-shadow: inset 0 0 16px rgba(119,255,102,0.08);
+}
+
+.display-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(0.6) saturate(1.4) brightness(0.88);
+}
+
+.cassette-slot {
+  grid-template-columns: minmax(170px, 1fr) minmax(180px, auto);
+  background:
+    linear-gradient(180deg, #070707, #151515),
+    repeating-linear-gradient(90deg, transparent 0 16px, rgba(255,255,255,0.03) 16px 17px);
+}
+
+.cassette-slot > span {
+  display: none;
+}
+
+.cassette-tape {
+  height: 54px;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, #1f1f1f, #080808);
+  border: 1px solid #2f2f2f;
+  display: grid;
+  grid-template-columns: 54px 1fr 54px;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 12px;
+  box-shadow: inset 0 6px 18px rgba(0,0,0,0.72);
+}
+
+.reel {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  place-self: center;
+  background:
+    radial-gradient(circle, #101010 0 20%, #777 21% 25%, #161616 26% 42%, #5d5d5d 43% 48%, #111 49%);
+  position: relative;
+  box-shadow: inset 0 2px 7px rgba(0,0,0,0.9), 0 0 0 1px #333;
+}
+
+.reel span,
+.reel::before,
+.reel::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 15px;
+  background: #101010;
+  border-radius: 999px;
+  transform-origin: center -2px;
+}
+
+.reel span {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.reel::before {
+  transform: translate(-50%, -50%) rotate(120deg);
+}
+
+.reel::after {
+  transform: translate(-50%, -50%) rotate(240deg);
+}
+
+.tape-window {
+  height: 10px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, #050505, #2b1a0b 35%, #130b05 65%, #050505);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.9);
+}
+
+body.playing .reel {
+  animation: spin-reel 1.15s linear infinite;
+}
+
+body.playing .reel.right {
+  animation-duration: 0.85s;
+}
+
+@keyframes spin-reel {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.memory-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.memory {
+  min-height: 44px;
+  border: 1px solid #242424;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 900;
+  color: #e6d5bd;
+  background:
+    linear-gradient(180deg, #3b3b3b, #111 70%),
+    repeating-linear-gradient(90deg, transparent 0 8px, rgba(255,255,255,0.04) 8px 9px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 -6px 12px rgba(0,0,0,0.55),
+    0 5px 12px rgba(0,0,0,0.25);
+}
+
+.memory.active {
+  background: linear-gradient(180deg, #ffd08a, var(--amber) 55%, #9a4f00);
+  color: #211100;
+}
+
+.station-card.curated {
+  border-color: rgba(255, 159, 28, 0.55);
+  box-shadow: 0 16px 38px rgba(255, 159, 28, 0.11);
+}
+
+.station-card.curated::before {
+  content: "HAFIZA";
+  align-self: flex-start;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--amber-soft);
+  color: var(--amber);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  font-weight: 900;
+}
+
+@media (max-width: 900px) {
+  .display-header {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+
+  .display-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    font-size: 16px;
+  }
+
+  .cassette-slot {
+    grid-template-columns: 1fr;
+  }
+
+  .memory-row {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 430px) {
+  .memory-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
