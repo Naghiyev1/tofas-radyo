@@ -1,0 +1,19 @@
+{
+  "name": "Tofaş Radyo",
+  "short_name": "Tofaş Radyo",
+  "description": "Türkiye radyoları için eski araba teybi tarzında ücretsiz web radyo oynatıcı.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#15110d",
+  "theme_color": "#18130f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
