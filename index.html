@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Tofaş Radyo</title>
+  <meta
+    name="description"
+    content="Türkiye radyoları için eski araba teybi tarzında ücretsiz web radyo oynatıcı."
+  />
+  <meta name="theme-color" content="#18130f" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.json" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="garage">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Türkiye radyoları · ücretsiz web player</p>
+        <h1>Tofaş Radyo</h1>
+        <p class="subtitle">
+          Eski araba teybi hissiyle Türkiye radyolarını dinle. Favoriler, son dinlenenler,
+          arama ve hızlı bant tuşları.
+        </p>
+      </div>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Tema değiştir">Farları Aç</button>
+    </section>
+
+    <section class="radio-face" aria-label="Radyo oynatıcı">
+      <div class="radio-top">
+        <div class="speaker-grille" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="radio-display">
+          <div class="display-label">FM STEREO</div>
+          <div id="currentStation" class="display-station">KANAL SEÇ</div>
+          <div id="currentMeta" class="display-meta">Türkiye · Hazır</div>
+          <div class="frequency-line">
+            <span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span>
+          </div>
+          <div class="frequency-track">
+            <div id="needle" class="needle"></div>
+          </div>
+        </div>
+
+        <div class="knob-panel">
+          <button id="powerButton" class="big-knob" type="button" aria-label="Durdur">
+            <span>POWER</span>
+          </button>
+          <button id="playerFavoriteButton" class="small-knob" type="button" disabled aria-label="Favorilere ekle">★</button>
+        </div>
+      </div>
+
+      <div class="cassette-slot">
+        <span></span>
+        <strong id="statusText">Radyolar yükleniyor...</strong>
+      </div>
+
+      <audio id="audioPlayer" controls></audio>
+
+      <div class="preset-row" aria-label="Hızlı seçimler">
+        <button class="preset active" type="button" data-filter="">TÜMÜ</button>
+        <button class="preset" type="button" data-filter="__favorites">FAV</button>
+        <button class="preset" type="button" data-filter="__recent">SON</button>
+        <button class="preset" type="button" data-filter="haber">HABER</button>
+        <button class="preset" type="button" data-filter="pop">POP</button>
+        <button class="preset" type="button" data-filter="rock">ROCK</button>
+        <button class="preset" type="button" data-filter="slow">SLOW</button>
+        <button class="preset" type="button" data-filter="arabesk">ARABESK</button>
+      </div>
+
+      <div class="controls">
+        <input id="searchInput" type="search" placeholder="Radyo ara..." />
+        <button id="searchButton" type="button">ARA</button>
+      </div>
+    </section>
+
+    <section class="stats-strip" aria-label="İstatistikler">
+      <div>
+        <strong id="stationCount">0</strong>
+        <span>radyo</span>
+      </div>
+      <div>
+        <strong id="favoriteCount">0</strong>
+        <span>favori</span>
+      </div>
+      <div>
+        <strong>TR</strong>
+        <span>Türkiye</span>
+      </div>
+    </section>
+
+    <section id="stationsGrid" class="stations-grid" aria-live="polite"></section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
