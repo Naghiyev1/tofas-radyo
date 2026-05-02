@@ -1,4 +1,4 @@
-# Tofaş Radyo
+# Tofaş Radyo v2
 
 A free static Turkish radio player styled like an old in-car radio/cassette unit.
 
@@ -7,7 +7,11 @@ A free static Turkish radio player styled like an old in-car radio/cassette unit
 - Loads Turkish radio stations from Radio Browser
 - Uses only free public resources
 - Plays stations in the browser
-- Old car-radio inspired interface
+- Old car-radio / cassette dashboard inspired interface
+- Curated Turkish station mode
+- Station logo inside the green display
+- Old-school memory buttons 1–6
+- Cassette reel animation while playing
 - Search
 - Preset-style filters
 - Favorites
@@ -34,21 +38,10 @@ tofas-radyo/
 
 ## Deploy on GitHub Pages
 
-1. Create a public GitHub repository called `tofas-radyo`.
-2. Upload all files to the root of the repository.
-3. Go to **Settings**.
-4. Go to **Pages**.
-5. Select:
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/root`
-6. Save.
-
-Your app will be available at:
-
-```text
-https://yourusername.github.io/tofas-radyo/
-```
+1. Upload all files to the root of your `tofas-radyo` repository.
+2. Commit the changes.
+3. Wait for GitHub Pages to redeploy.
+4. Hard refresh once.
 
 ## Notes
 
