@@ -23,7 +23,7 @@
         <h1>Tofaş Radyo</h1>
         <p class="subtitle">
           Eski araba teybi hissiyle Türkiye radyolarını dinle. Favoriler, son dinlenenler,
-          arama ve hızlı bant tuşları.
+          arama, klasik hafıza tuşları ve kaset animasyonu.
         </p>
       </div>
       <button id="themeToggle" class="theme-toggle" type="button" aria-label="Tema değiştir">Farları Aç</button>
@@ -37,9 +37,15 @@
         </div>
 
         <div class="radio-display">
-          <div class="display-label">FM STEREO</div>
-          <div id="currentStation" class="display-station">KANAL SEÇ</div>
-          <div id="currentMeta" class="display-meta">Türkiye · Hazır</div>
+          <div class="display-header">
+            <div id="displayLogo" class="display-logo">TR</div>
+            <div>
+              <div class="display-label">FM STEREO · AUTO REVERSE</div>
+              <div id="currentStation" class="display-station">KANAL SEÇ</div>
+              <div id="currentMeta" class="display-meta">Türkiye · Hazır</div>
+            </div>
+          </div>
+
           <div class="frequency-line">
             <span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span>
           </div>
@@ -57,20 +63,33 @@
       </div>
 
       <div class="cassette-slot">
-        <span></span>
+        <div id="cassetteTape" class="cassette-tape" aria-hidden="true">
+          <div class="reel left"><span></span></div>
+          <div class="tape-window"></div>
+          <div class="reel right"><span></span></div>
+        </div>
         <strong id="statusText">Radyolar yükleniyor...</strong>
       </div>
 
       <audio id="audioPlayer" controls></audio>
 
+      <div class="memory-row" aria-label="Eski usul hafıza tuşları">
+        <button class="memory active" type="button" data-memory="0">1</button>
+        <button class="memory" type="button" data-memory="1">2</button>
+        <button class="memory" type="button" data-memory="2">3</button>
+        <button class="memory" type="button" data-memory="3">4</button>
+        <button class="memory" type="button" data-memory="4">5</button>
+        <button class="memory" type="button" data-memory="5">6</button>
+      </div>
+
       <div class="preset-row" aria-label="Hızlı seçimler">
         <button class="preset active" type="button" data-filter="">TÜMÜ</button>
+        <button class="preset" type="button" data-filter="__curated">KLASİK</button>
         <button class="preset" type="button" data-filter="__favorites">FAV</button>
         <button class="preset" type="button" data-filter="__recent">SON</button>
         <button class="preset" type="button" data-filter="haber">HABER</button>
         <button class="preset" type="button" data-filter="pop">POP</button>
         <button class="preset" type="button" data-filter="rock">ROCK</button>
-        <button class="preset" type="button" data-filter="slow">SLOW</button>
         <button class="preset" type="button" data-filter="arabesk">ARABESK</button>
       </div>
 
