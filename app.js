@@ -13,7 +13,9 @@ const playerFavoriteButton = document.getElementById("playerFavoriteButton");
 const powerButton = document.getElementById("powerButton");
 const themeToggle = document.getElementById("themeToggle");
 const needle = document.getElementById("needle");
+const displayLogo = document.getElementById("displayLogo");
 const presets = Array.from(document.querySelectorAll(".preset"));
+const memoryButtons = Array.from(document.querySelectorAll(".memory"));
 
 let stations = [];
 let activeFilter = "";
@@ -22,6 +24,21 @@ let favoriteStations = JSON.parse(localStorage.getItem("tofasRadyoFavorites") ||
 let recentlyPlayedStations = JSON.parse(localStorage.getItem("tofasRadyoRecent") || "[]");
 let favorites = favoriteStations.map(station => station.stationuuid);
 let lightsMode = localStorage.getItem("tofasRadyoLights") || "off";
+
+const curatedStationQueries = [
+  { name: "Kral Pop", tag: "pop" },
+  { name: "Power Türk", tag: "pop" },
+  { name: "Radyo D", tag: "pop" },
+  { name: "Slow Türk", tag: "slow" },
+  { name: "Metro FM", tag: "pop" },
+  { name: "Alem FM", tag: "pop" },
+  { name: "Show Radyo", tag: "pop" },
+  { name: "NTV Radyo", tag: "haber" },
+  { name: "TRT FM", tag: "trt" },
+  { name: "TRT Türkü", tag: "turku" },
+  { name: "Joy Türk", tag: "slow" },
+  { name: "Virgin Radio Turkey", tag: "rock" }
+];
 
 function updateFavoriteCount() {
   favoriteCount.textContent = favorites.length;
@@ -35,6 +52,11 @@ async function fetchStations() {
 
   if (activeFilter === "__recent") {
     renderRecentlyPlayedStations();
+    return;
+  }
+
+  if (activeFilter === "__curated") {
+    renderCuratedStations();
     return;
   }
 
@@ -90,6 +112,95 @@ async function fetchStations() {
   }
 }
 
+
+async function renderCuratedStations() {
+  statusText.textContent = "Klasik hafıza istasyonları yükleniyor...";
+  stationsGrid.innerHTML = "";
+  stationCount.textContent = "0";
+
+  try {
+    const results = await Promise.all(
+      curatedStationQueries.map(query =>
+        fetchCuratedStation(query).catch(error => {
+          console.warn(`Curated station failed: ${query.name}`, error);
+          return null;
+        })
+      )
+    );
+
+    const searchTerm = searchInput.value.trim().toLowerCase();
+
+    stations = results
+      .filter(Boolean)
+      .filter(station => station.lastcheckok === 1)
+      .filter(station => station.url_resolved || station.url)
+      .filter(removeDuplicatesByUrl)
+      .filter(station => {
+        if (!searchTerm) {
+          return true;
+        }
+
+        return [
+          station.name,
+          station.tags,
+          station.country
+        ].some(value => String(value || "").toLowerCase().includes(searchTerm));
+      })
+      .map(station => ({ ...station, isCurated: true }));
+
+    renderStations(stations);
+    stationCount.textContent = stations.length;
+    statusText.textContent = stations.length
+      ? `${stations.length} klasik istasyon hazır`
+      : "Klasik listede eşleşen radyo bulunamadı.";
+  } catch (error) {
+    console.error(error);
+    statusText.textContent = "Klasik istasyonlar yüklenemedi.";
+    stationsGrid.innerHTML = `<div class="empty-state">Klasik istasyonlar yüklenirken bir sorun oluştu.</div>`;
+  }
+}
+
+async function fetchCuratedStation(query) {
+  const params = new URLSearchParams({
+    countrycode: "TR",
+    hidebroken: "true",
+    order: "clickcount",
+    reverse: "true",
+    limit: "10",
+    name: query.name
+  });
+
+  const response = await fetch(`${API_BASE}/stations/search?${params.toString()}`);
+
+  if (!response.ok) {
+    throw new Error("Curated radio API request failed.");
+  }
+
+  const data = await response.json();
+
+  return data
+    .filter(station => station.lastcheckok === 1)
+    .filter(station => station.url_resolved || station.url)
+    .sort((a, b) => Number(b.clickcount || 0) - Number(a.clickcount || 0))[0] || null;
+}
+
+function playMemoryStation(index) {
+  if (!stations[index]) {
+    statusText.textContent = "Bu hafıza tuşunda henüz radyo yok.";
+    return;
+  }
+
+  memoryButtons.forEach(button => button.classList.remove("active"));
+  const button = memoryButtons[index];
+  if (button) {
+    button.classList.add("active");
+  }
+
+  const station = stations[index];
+  playStation(station, station.url_resolved || station.url);
+}
+
+
 function removeDuplicatesByUrl(station, index, array) {
   const currentUrl = station.url_resolved || station.url;
   return array.findIndex(item => (item.url_resolved || item.url) === currentUrl) === index;
@@ -105,7 +216,7 @@ function renderStations(stationsToRender) {
 
   stationsToRender.forEach(station => {
     const card = document.createElement("article");
-    card.className = "station-card";
+    card.className = `station-card${station.isCurated ? " curated" : ""}`;
 
     const streamUrl = station.url_resolved || station.url;
     const isFavorite = favorites.includes(station.stationuuid);
@@ -177,8 +288,21 @@ function updateRadioDisplay(station) {
   currentStation.textContent = station.name;
   currentMeta.textContent = `${station.country || "Türkiye"}${station.codec ? " · " + station.codec.toUpperCase() : ""}${station.bitrate ? " · " + station.bitrate + " kbps" : ""}`;
 
+  const initials = getInitials(station.name);
+
+  if (station.favicon) {
+    displayLogo.innerHTML = `<img src="${escapeHTML(station.favicon)}" alt="" />`;
+    const logoImage = displayLogo.querySelector("img");
+    logoImage.addEventListener("error", () => {
+      displayLogo.textContent = initials;
+    });
+  } else {
+    displayLogo.textContent = initials;
+  }
+
   playerFavoriteButton.disabled = false;
   playerFavoriteButton.classList.toggle("active", favorites.includes(station.stationuuid));
+  document.body.classList.add("playing");
 
   const needlePosition = 7 + Math.floor(Math.random() * 84);
   needle.style.left = `${needlePosition}%`;
@@ -194,6 +318,8 @@ function stopRadio() {
   currentMeta.textContent = "Türkiye · Hazır";
   playerFavoriteButton.disabled = true;
   playerFavoriteButton.classList.remove("active");
+  displayLogo.textContent = "TR";
+  document.body.classList.remove("playing");
   needle.style.left = "7%";
   statusText.textContent = "Radyo kapatıldı.";
 }
@@ -309,6 +435,13 @@ playerFavoriteButton.addEventListener("click", () => {
   if (currentPlayingStation) {
     toggleFavorite(currentPlayingStation.stationuuid);
   }
+});
+
+memoryButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    const index = Number(button.dataset.memory);
+    playMemoryStation(index);
+  });
 });
 
 powerButton.addEventListener("click", stopRadio);
